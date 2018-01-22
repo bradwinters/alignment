@@ -219,7 +219,8 @@ def readData():
     Open hardcoded file, parse data anticipataed but may change
     Load just data into a numpy array, 
     '''
-    f = open('t.txt', 'r')   #Extra dataset
+    #f = open('t.txt', 'r')   #Extra dataset
+    f = open('tt.txt', 'r')   #Extra dataset
     #f = open('test.txt', 'r')   #Small example dataset  from text
     cnt=0
     for line in f:
@@ -284,19 +285,43 @@ def main():
 'Y': {'A': -2, 'C': -2, 'E': -2, 'D': -3, 'G': -3, 'F': 3, 'I': -1, 'H': 2, 'K': -2, 'M': -1, 'L': -1, 'N': -2, 'Q': -1, 'P': -3, 'S': -2, 'R': -2, 'T': -2, 'W': 2, 'V': -1, 'Y': 7}}
 
 
-   
+    Gap=-2 
+    print("Gap penalty is ",Gap)
+    print("Scoring matrix is ")
+    
     AncString, DesString = readData() #load Data and Params from file
     print("Strings to compare are:")
     print(AncString)
     print("Which mutates to ")
     print(DesString)
+    
+    ColSize=len(AncString)+1
+    RowSize=len(DesString)+1
+
+    fullGrid=[]
+    for i in range(RowSize):
+        tGrid=[]
+        for j in range(ColSize):
+            tGrid.append(0)
+        fullGrid.append(tGrid)
+
+    npGrid=np.array(fullGrid)
+    print(npGrid)
+
+   
+    for j in range(1,ColSize):
+        npGrid[0][j]=npGrid[0][j-1]+Gap
+    for i in range(1,RowSize):
+        npGrid[i][0]=npGrid[i-1][0]+Gap
+
+    print(npGrid)
 
     print("Test drive blosom array")
-    tGrid=[]
-    fullGrid=[]
-    for i in range(len(DesString)):
+
+
+    for i in range(2,ColSize)):
         tGrid=[]
-        for j in range(len(AncString)):
+        for j in range(2,RowSize):
              a1=AncString[j]
              d1=DesString[i]
 
