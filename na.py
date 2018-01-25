@@ -4,9 +4,11 @@ import numpy as np
 
 def scoreNA(na1,na2):
     sim_mat = [[2,-1,1,-1],[-1,2,-1,1],[1,-1,2,-1],[-1,1,-1,2]]
-    rowDict= {'A':1,'C':2,'G':3,'T':4}
+    rowDict= {'A':0,'C':1,'G':2,'T':3}
     row=rowDict[na1]
     col=rowDict[na2]
+    
+    print(sim_mat[row][col])
     return sim_mat[row][col]
 
 def MaxOfThree(pOne,pTwo,pThree):
@@ -197,6 +199,7 @@ def print2D(pDesString,pAncString,Centers):  # prints floats to 3 dec places
 
     oldString="  "
     topLine="  "
+    padDesString=' '+pDesString
     for i in range(len(pAncString)):
         oldString+=pAncString[i]+"   "
         topLine+="-----"
@@ -204,7 +207,7 @@ def print2D(pDesString,pAncString,Centers):  # prints floats to 3 dec places
     print(topLine)
     cntr=0
     for row in Centers:
-       print(pDesString[cntr],"|",end=" ")
+       print(padDesString[cntr],"|",end=" ")
        cntr+=1
        for element in row:
            print("%3d" % (element),end=" ")
@@ -295,13 +298,13 @@ def main():
     print("Which mutates to ")
     print(DesString)
     
-    ColSize=len(AncString)+1
-    RowSize=len(DesString)+1
+    AColSize=len(AncString)+1
+    DRowSize=len(DesString)+1
 
     fullGrid=[]
-    for i in range(RowSize):
+    for i in range(DRowSize):
         tGrid=[]
-        for j in range(ColSize):
+        for j in range(AColSize):
             tGrid.append(0)
         fullGrid.append(tGrid)
 
@@ -309,36 +312,30 @@ def main():
     print(npGrid)
 
    
-    for j in range(1,ColSize):
+    for j in range(1,AColSize):
         npGrid[0][j]=npGrid[0][j-1]+Gap
-    for i in range(1,RowSize):
+    for i in range(1,DRowSize):
         npGrid[i][0]=npGrid[i-1][0]+Gap
 
     print(npGrid)
 
     print("Test drive blosom array")
 
+####D[i,j] = max { D[i-1,j-1]+ sim_mat[s[j],t[i]], D[i-1,j] + gap_score, D[i,j-1] + gap_score };
 
-    for i in range(2,ColSize)):
-        tGrid=[]
-        for j in range(2,RowSize):
-             a1=AncString[j]
-             d1=DesString[i]
-
-             if a1==d1:
-                 MDiag=tGrid[i-1][j-1]+1
-             else:
-                 MDiag=tGrid[i-1][j-1]-2
-
-             PrevRow=tGrid[i-1][j]-1
-             PrevCol=tGrid[i][j-1]-1
-             Score=MaxOfThree(MDiag,PrevRow,PrevCol)
-             print("Match",MDiag,"MisM ",MMDiag,"PRow",PevRow,"PCol",PrevCol)
-             print("Compare ",a1," to ",d1," => ",MaxOfThree)
-             tGrid.append(Score)
-        fullGrid.append(tGrid)
-        print()
-    print2D(DesString,AncString,fullGrid)
+    for i in range(1,AColSize):
+        for j in range(1,DRowSize):
+             print("Calling simescore with ",j-2," and ",i-2)
+             print("Which is ",AncString[i-1]," and ",DesString[j-1])
+             simScore=scoreNA(AncString[i-1],DesString[j-1])
+             Diag =npGrid[i-1][j-1]+simScore
+             prevRow=npGrid[i-1][j] +Gap
+             prevCol =npGrid[i][j-1] +Gap
+             Score=MaxOfThree(Diag,prevRow,prevCol)
+             
+             print(i," ",j,":Diag,",Diag,"PrevRow",prevRow,"PCol",prevCol)
+             npGrid[i][j]=Score
+             print2D(DesString,AncString,npGrid)
 
     exit()
 
