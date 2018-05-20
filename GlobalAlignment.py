@@ -2,16 +2,6 @@ import numpy as np
 '''
 '''
 
-def TTarget(prBackPath,pDesString):
-    alignedString=""
-    
-    for x in range(len(prBackPath)):
-        if prBackPath[x]=='H':
-            alignedString+='-'
-        else:
-            alignedString+=pDesString[x]
-
-    return alignedString 
 
 def CalcScore(FAString,FDString,blo):
 
@@ -25,18 +15,6 @@ def CalcScore(FAString,FDString,blo):
              
     return dScore
 
-
-
-def TSource(prBackPath,pAncString):
-    alignedString=""
-    
-    for x in range(len(prBackPath)):
-        if prBackPath[x]=='V':
-            alignedString+='-'
-        else:
-            alignedString+=pAncString[x]
-
-    return alignedString 
 
 
 def scoreNA(na1,na2):
